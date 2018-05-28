@@ -1,0 +1,140 @@
+<style>
+	* {
+		margin: 0;
+		padding: 0;
+	}
+	#game {
+		height: 100vh;
+		width: 100vw;
+		
+	}
+
+	#score_holder{
+		color: white;
+		position: fixed;
+		bottom: 10px;
+		right: 20px;
+		font-size: 72px;
+		font-weight: 700;
+	}
+
+</style>
+
+<canvas id="game"></canvas>
+<div id="score_holder">
+	23
+</div>
+
+<script>
+
+	window.onload = function() {
+		canvas = document.getElementById("game");
+		
+		canvas.width = 500;
+		canvas.height = 500;
+
+		context= canvas.getContext("2d");
+
+		document.addEventListener("keydown", keyPush);
+		// update the canvas 15 times per second 
+		// i.e. frame rate
+		setInterval(game, 1000/15);
+	}
+
+	player_x = player_y = 5;
+	
+	velocity_x = velocity_y = 0;
+
+	trail = [];
+	
+	// initial length of the tail
+	tail = 5;
+
+	grid_size = 10;
+	tile_count_x = 50;
+	tile_count_y = 50;
+
+	grid_height = window.innerHeight;
+	grid_width = window.innerWidth;
+
+
+	function game(){
+		
+		//update position of the snake
+		player_x += velocity_x;
+		player_y += velocity_y;
+
+		if(player_x < 0){
+		
+			player_x = tile_count_x - 1;
+		}
+	
+		if(player_x > tile_count_x - 1){
+			
+			player_x = 0;
+		
+		}
+
+		if(player_y < 0){
+		
+			player_y = tile_count_y - 1;
+		
+		}
+
+		if(player_y > tile_count_y - 1){
+			
+			player_y = 0;
+		
+		}		
+		
+		context.fillStyle = "black";
+		context.fillRect(0,0, grid_width, grid_height);
+		
+		context.fillStyle = "orange";
+		//draw snake
+		for(var i=0; i<trail.length; i++){
+		
+			context.fillRect(trail[i].x*grid_size, trail[i].y*grid_size,grid_size-3, grid_size-3);
+			
+			if(trail[i].x == player_x && trail[i].y == player_y) {
+				tail = 5;
+			}
+			
+		}
+
+		trail.push({x: player_x, y:player_y});
+		
+		while(trail.length > tail){
+			trail.shift();
+		}
+					
+
+	}
+
+	function keyPush(event) {
+		console.log("Key pressed");
+		switch(event.keyCode) {
+
+			case 37:
+				velocity_x = -1;
+				velocity_y = 0;
+				break;
+
+			case 38:
+				velocity_x = 0;
+				velocity_y = -1;
+				break;
+			
+			case 39:
+				velocity_x = 1;
+				velocity_y = 0;
+				break;
+			
+			case 40:
+				velocity_x = 0;
+				velocity_y = 1;
+				break;
+		}
+	}
+
+</script>
