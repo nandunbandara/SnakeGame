@@ -112,32 +112,36 @@ function keyPush(event) {
 	switch(event.keyCode) {
 
 		case 37:
-			if(previous_key_code == 39)
+			if(!isInitState() && velocity_x === 1)
 				return;
 			velocity_x = -1;
 			velocity_y = 0;
 			break;
 
 		case 38:
-			if(previous_key_code == 40)
+			if(!isInitState() && velocity_y === 1)
 				return;
 			velocity_x = 0;
 			velocity_y = -1;
 			break;
 		
 		case 39:
-			if(previous_key_code == 37)
+			if(!isInitState() && velocity_x === -1)
 				return;
 			velocity_x = 1;
 			velocity_y = 0;
 			break;
 		
 		case 40:
-			if(previous_key_code == 38)
+			if(!isInitState() && velocity_y === -1)
 				return;
 			velocity_x = 0;
 			velocity_y = 1;
 			break;
 	}
-	previous_key_code = event.keyCode;
+
+}
+
+function isInitState() {
+	return velocity_x === velocity_y === 0;
 }
